@@ -1,7 +1,7 @@
 // src/modules/company/models/companyModel.ts
 import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
 
-import sequelize from '#shared/database';
+import sequelize from '#shared/database/sequelize';
 import { I_Company } from './company.types';
 import { Field } from '#modules/field';
 import { User } from '#modules/user';

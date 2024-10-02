@@ -1,6 +1,6 @@
 import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
 
-import sequelize from '#shared/database';
+import sequelize from '#shared/database/sequelize';
 import { E_Role, I_User } from './user.types';
 
 // Khi tạo mới sẽ không bắt buộc các trường 'id' | 'created_at' | 'updated_at'

@@ -1,7 +1,7 @@
 // src/modules/company/models/fieldModel.ts
 import { DataTypes, Model, Optional } from 'sequelize';
 
-import sequelize from '#shared/database';
+import sequelize from '#shared/database/sequelize';
 import { I_Field } from './field.types';
 
 interface I_Field_Creation extends Optional<I_Field, 'id'> { }

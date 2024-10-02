@@ -15,7 +15,6 @@
       "moduleResolution": "node",
       "baseUrl": "./",
       "paths": {
-          "cyberskill/*": ["node_modules/cyberskill/dist/*"],
           "#modules/*": ["src/modules/*"],
           "#shared/*": ["src/shared/*"],
           "#config": ["src/config"]

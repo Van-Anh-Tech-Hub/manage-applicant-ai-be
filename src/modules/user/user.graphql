@@ -1,0 +1,14 @@
+type User {
+  id: ID!
+  fullName: String!
+  email: String!
+  role: String!
+}
+
+type Query {
+  getUser(userId: String!): JSON!
+  #   getUsers(page: Number, pageSize: Number,isPagination:Boolean): JSON!
+}
+type Mutation {
+  createUser(doc: JSON!): JSON!
+}

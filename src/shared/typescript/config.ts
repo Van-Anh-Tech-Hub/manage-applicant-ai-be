@@ -24,6 +24,7 @@ export interface I_Config {
   HOST_NAME: string;
   PORT: number;
   RESTAPI_ENDPOINT: string;
+  GRAPHQL_ENDPOINT: string;
   DB_USER: string;
   DB_PASSWORD: string;
   DB_SERVER: string;

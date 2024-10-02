@@ -45,6 +45,7 @@ const config: I_Config = {
     HOST_NAME: requiredEnv('HOST_NAME'),
     PORT: requiredIntEnv('PORT'),
     RESTAPI_ENDPOINT: requiredEnv('RESTAPI_ENDPOINT'),
+    GRAPHQL_ENDPOINT: requiredEnv('GRAPHQL_ENDPOINT'),
     DB_USER: requiredEnv('DB_USER'),
     DB_PASSWORD: requiredEnv('DB_PASSWORD'),
     DB_SERVER: requiredEnv('DB_SERVER'),
