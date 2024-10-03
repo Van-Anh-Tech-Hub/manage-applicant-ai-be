@@ -6,5 +6,5 @@ export interface I_Company extends I_BaseAttributes {
   name: string;
   working_address: string;
   fieldId: string;
-  employee_size?: string;// Quy mô nhân sự
+  employeeSize?: string;// Quy mô nhân sự
 }

@@ -1,5 +1,4 @@
-// src/modules/company/models/fieldModel.ts
-import { DataTypes, Model, Optional } from 'sequelize';
+import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { I_Field } from './field.types';
@@ -10,6 +9,8 @@ export class Field extends Model<I_Field, I_Field_Creation> implements I_Field {
     public id!: string;
     public isDel!: boolean
     public name!: string;
+    public readonly created_at!: Date;
+    public readonly updated_at!: Date;
 }
 
 Field.init({
@@ -36,3 +37,9 @@ Field.init({
     timestamps: true,
     underscored: true,
 });
+
+Field.beforeCreate(async (record: Field, options: CreateOptions) => {
+    if (record.isDel === undefined) {
+        record.dataValues.isDel = false;
+    }
+  });

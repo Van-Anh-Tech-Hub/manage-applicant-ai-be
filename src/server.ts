@@ -9,7 +9,7 @@ import { json } from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
-import session from 'express-session';
+import session, { SessionOptions } from 'express-session';
 import passport from 'passport';
 import { createServer } from 'http';
 import notifier from 'node-notifier';
@@ -28,10 +28,15 @@ import sequelize from '#shared/database/sequelize';
     app.use(express.json({ limit: config.BODY_PARSER_LIMIT }));
     app.use(compression());
 
-    const sessionOptions = {
+    const sessionOptions: SessionOptions = {
         secret: config.SESSION.SECRET,
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            maxAge: config.SESSION.MAX_AGE,
+            secure: config.IS_PROD, 
+            sameSite: 'lax',
+        },
     };
 
     app.use(session(sessionOptions));
@@ -99,20 +104,20 @@ import sequelize from '#shared/database/sequelize';
     );
 
     sequelize.sync({ alter: false })
-    .then(() => {
-        console.log('🚀🚀 Connected Connected to the database successfully 🚀🚀');
-        httpServer.listen(config.PORT, () => {
-            notifier.notify({
-                title: 'Success',
-                message: 'Server started!',
-            });
+        .then(() => {
+            console.log('🚀🚀 Connected Connected to the database successfully 🚀🚀');
+            httpServer.listen(config.PORT, () => {
+                notifier.notify({
+                    title: 'Success',
+                    message: 'Server started!',
+                });
 
-            console.info(`🚀🚀 Running RestAPI on http://${config.HOST_NAME}:${config.PORT}${config.RESTAPI_ENDPOINT} 🚀🚀`);
+                console.info(`🚀🚀 Running RestAPI on http://${config.HOST_NAME}:${config.PORT}${config.GRAPHQL_ENDPOINT} 🚀🚀`);
+            });
+        })
+        .catch((err) => {
+            console.error('Unable to connect to the database:', err);
         });
-    })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err);
-    });
 
     process.on('SIGINT', async () => {
         await serverCleanup.dispose();

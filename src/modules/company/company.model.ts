@@ -15,7 +15,7 @@ export class Company extends Model<I_Company, I_Company_Creation> implements I_C
   public description!: string;
   public working_address!: string;
   public fieldId!: string;
-  public employee_size!: string;
+  public employeeSize!: string;
   public isDel!: boolean;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
@@ -52,7 +52,7 @@ Company.init({
     type: DataTypes.UUID,
     allowNull: false,
   },
-  employee_size: {
+  employeeSize: {
     type: DataTypes.STRING,
     allowNull: false,
   },

@@ -4,7 +4,6 @@ import { User } from './user.model';
 import { I_Context, I_FindPaging } from '#shared/typescript';
 import { paginate } from '#shared/utils/paginate';
 import { throwResponse } from '#shared/utils/log';
-import { RESPONSE_STATUS } from '#shared/constants';
 import { UserError } from '#shared/constants/error-response';
 
 export const userCtr = {
