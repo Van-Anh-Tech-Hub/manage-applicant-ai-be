@@ -5,6 +5,9 @@ const resolvers = {
         getUser: (_, args, context) => userCtr.getUser(context, args),
         // getUsers: (_, args, context) => userCtr.getUsers(context, args)
     },
+    Mutation:{
+        createUser: (_, args, context) => userCtr.createUser(context, args),
+    }
 };
 
 export default resolvers;

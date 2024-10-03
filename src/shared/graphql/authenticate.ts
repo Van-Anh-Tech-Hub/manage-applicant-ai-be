@@ -12,7 +12,7 @@ const authenticate: IMiddlewareFunction<{ req: Request }> = async (resolve, pare
     });
   }
 
-  const token = authorization.replace('Bearer ', '');
+  // const token = authorization.replace('Bearer ', '');
 
   try {
     const user = "123"
@@ -24,7 +24,7 @@ const authenticate: IMiddlewareFunction<{ req: Request }> = async (resolve, pare
     context.user = user;
 
     return resolve(parent, args, context, info);
-  } catch (err) {
+  } catch {
     throw new GraphQLError('Invalid or expired token', {
       extensions: {
         code: 'UNAUTHENTICATED',

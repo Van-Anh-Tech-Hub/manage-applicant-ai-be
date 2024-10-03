@@ -7,8 +7,7 @@ type User {
 
 type Query {
   getUser(userId: String!): JSON!
-  #   getUsers(page: Number, pageSize: Number,isPagination:Boolean): JSON!
 }
 type Mutation {
-  createUser(doc: JSON!): JSON!
+  createUser(input: JSON!): JSON!
 }

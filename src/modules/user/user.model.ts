@@ -1,12 +1,8 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { E_Role, I_User } from './user.types';
-
-// Khi tạo mới sẽ không bắt buộc các trường 'id' | 'created_at' | 'updated_at'
-interface I_User_Creation extends Optional<I_User, 'id' | 'created_at' | 'updated_at'> { }
-
-export class User extends Model<I_User, I_User_Creation> implements I_User {
+export class User extends Model<I_User> implements I_User {
     public id!: string;
     public fullName!: string;
     public email!: string;
@@ -67,7 +63,7 @@ User.init({
 });
 
 
-User.beforeCreate(async (record: User, options: CreateOptions) => {
+User.beforeCreate(async (record: User) => {
     if (record.isDel === undefined) {
         record.dataValues.isDel = false;
     }

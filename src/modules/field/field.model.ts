@@ -1,11 +1,9 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { I_Field } from './field.types';
 
-interface I_Field_Creation extends Optional<I_Field, 'id'> { }
-
-export class Field extends Model<I_Field, I_Field_Creation> implements I_Field {
+export class Field extends Model<I_Field> implements I_Field {
     public id!: string;
     public isDel!: boolean
     public name!: string;
@@ -38,7 +36,7 @@ Field.init({
     underscored: true,
 });
 
-Field.beforeCreate(async (record: Field, options: CreateOptions) => {
+Field.beforeCreate(async (record: Field) => {
     if (record.isDel === undefined) {
         record.dataValues.isDel = false;
     }

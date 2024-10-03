@@ -1,12 +1,10 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { CandidateProfile } from '../candidate-profile/candidate-profile.model';
 import { I_CandidateProfileCVUrl } from './candidate-profile-cv-url.types';
 
-interface I_CandidateProfileCVUrl_Creation extends Optional<I_CandidateProfileCVUrl, 'id' | 'created_at' | 'updated_at'> { }
-
-export class CandidateProfileCVUrl extends Model<I_CandidateProfileCVUrl, I_CandidateProfileCVUrl_Creation> implements I_CandidateProfileCVUrl {
+export class CandidateProfileCVUrl extends Model<I_CandidateProfileCVUrl> implements I_CandidateProfileCVUrl {
   public id!: string;
   public profileId!: string;
   public cvUrl!: string;
@@ -40,7 +38,7 @@ CandidateProfileCVUrl.init({
   underscored: true,
 });
 
-CandidateProfileCVUrl.beforeCreate(async (record: CandidateProfileCVUrl, options: CreateOptions) => {
+CandidateProfileCVUrl.beforeCreate(async (record: CandidateProfileCVUrl) => {
   if (record.isDel === undefined) {
     record.dataValues.isDel = false;
   }

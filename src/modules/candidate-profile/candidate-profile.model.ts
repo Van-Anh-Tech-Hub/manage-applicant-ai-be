@@ -1,12 +1,10 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { User } from '#modules/user';
 import { E_Experience, I_CandidateProfile } from './candidate-profile.types';
 
-interface I_CandidateProfile_Creation extends Optional<I_CandidateProfile, 'id' | 'created_at' | 'updated_at'> { }
-
-export class CandidateProfile extends Model<I_CandidateProfile, I_CandidateProfile_Creation> implements I_CandidateProfile {
+export class CandidateProfile extends Model<I_CandidateProfile> implements I_CandidateProfile {
   public id!: string;
   public experience!: E_Experience;
   public userId!: string;
@@ -46,7 +44,7 @@ CandidateProfile.init({
   underscored: true,
 });
 
-CandidateProfile.beforeCreate(async (record: CandidateProfile, options: CreateOptions) => {
+CandidateProfile.beforeCreate(async (record: CandidateProfile) => {
   if (record.isDel === undefined) {
     record.dataValues.isDel = false;
   }

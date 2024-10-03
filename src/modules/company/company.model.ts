@@ -1,14 +1,11 @@
 // src/modules/company/models/companyModel.ts
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { I_Company } from './company.types';
 import { Field } from '#modules/field';
 import { User } from '#modules/user';
-
-interface I_Company_Creation extends Optional<I_Company, 'id' | 'created_at' | 'updated_at'> { }
-
-export class Company extends Model<I_Company, I_Company_Creation> implements I_Company {
+export class Company extends Model<I_Company> implements I_Company {
   public id!: string;
   public userId!: string;
   public name!: string;
@@ -68,7 +65,7 @@ Company.init({
 });
 
 
-Company.beforeCreate(async (record: Company, options: CreateOptions) => {
+Company.beforeCreate(async (record: Company) => {
   if (record.isDel === undefined) {
       record.dataValues.isDel = false;
   }

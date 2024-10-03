@@ -45,7 +45,7 @@ import sequelize from '#shared/database/sequelize';
 
     const corsOptionsDelegate = {
         origin(requestOrigin, callback) {
-            let newOrigin = config.CORS_WHITELIST.indexOf(requestOrigin) !== -1 || !requestOrigin;
+            const newOrigin = config.CORS_WHITELIST.indexOf(requestOrigin) !== -1 || !requestOrigin;
             callback(null, { origin: newOrigin, credentials: true });
         },
         credentials: true,

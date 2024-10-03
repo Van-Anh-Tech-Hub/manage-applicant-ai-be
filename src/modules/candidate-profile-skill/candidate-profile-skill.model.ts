@@ -1,13 +1,10 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { CandidateProfile } from '../candidate-profile/candidate-profile.model';
 import { I_CandidateProfileSkill } from './candidate-profile-skill.types';
 
-
-interface I_CandidateProfileSkill_Creation extends Optional<I_CandidateProfileSkill, 'id' | 'created_at' | 'updated_at'> { }
-
-export class CandidateProfileSkill extends Model<I_CandidateProfileSkill, I_CandidateProfileSkill_Creation> implements I_CandidateProfileSkill {
+export class CandidateProfileSkill extends Model<I_CandidateProfileSkill> implements I_CandidateProfileSkill {
   public id!: string;
   public profileId!: string;
   public skill!: string;
@@ -41,7 +38,7 @@ CandidateProfileSkill.init({
   underscored: true,
 });
 
-CandidateProfileSkill.beforeCreate(async (record: CandidateProfileSkill, options: CreateOptions) => {
+CandidateProfileSkill.beforeCreate(async (record: CandidateProfileSkill) => {
   if (record.isDel === undefined) {
     record.dataValues.isDel = false;
   }

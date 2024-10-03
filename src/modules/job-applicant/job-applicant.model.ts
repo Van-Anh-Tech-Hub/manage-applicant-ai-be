@@ -1,13 +1,12 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
 
 import sequelize from '#shared/database/sequelize';
 import { User } from '#modules/user';
 import { I_JobApplicant } from './job-applicant.types';
 import { Job } from '#modules/job/job.model';
 
-interface I_JobApplicant_Creation extends Optional<I_JobApplicant, 'id' | 'created_at' | 'updated_at'> { }
 
-export class JobApplicant extends Model<I_JobApplicant, I_JobApplicant_Creation> implements I_JobApplicant {
+export class JobApplicant extends Model<I_JobApplicant> implements I_JobApplicant {
   public id!: string;
   public jobId!: string;
   public userId!: string;
@@ -53,7 +52,7 @@ JobApplicant.init({
   ],
 });
 
-JobApplicant.beforeCreate(async (record: JobApplicant, options: CreateOptions) => {
+JobApplicant.beforeCreate(async (record: JobApplicant) => {
   if (record.isDel === undefined) {
     record.dataValues.isDel = false;
   }

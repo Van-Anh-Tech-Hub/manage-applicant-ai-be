@@ -5,8 +5,9 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { IResolvers, TypeSource } from '@graphql-tools/utils';
 import { DocumentNode, GraphQLScalarType } from 'graphql';
 import { GraphQLDateTime, GraphQLJSON } from 'graphql-scalars';
+
 import path from 'path';
-import authenticate from './authenticate';
+// import authenticate from './authenticate';
 
 type T_ResolverObject = Record<string, Record<string, GraphQLScalarType>>;
 
@@ -32,7 +33,6 @@ const schemaWithoutMiddleware = makeExecutableSchema({
     },
 });
 
-// Apply middleware to queries/mutations that need authentication
 const schema = applyMiddleware(
     schemaWithoutMiddleware,
     {

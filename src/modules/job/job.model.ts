@@ -1,11 +1,10 @@
-import { CreateOptions, DataTypes, Model, Optional } from 'sequelize';
+import{ DataTypes, Model } from 'sequelize';
+
 import sequelize from '#shared/database/sequelize';
 import { I_Job } from './job.types';
 import { User } from '#modules/user';
 
-interface I_Job_Creation extends Optional<I_Job, 'id' | 'created_at' | 'updated_at'> {}
-
-export class Job extends Model<I_Job, I_Job_Creation> implements I_Job {
+export class Job extends Model<I_Job> implements I_Job {
   public id!: string;
   public recruiterId!: string;
   public title!: string;
