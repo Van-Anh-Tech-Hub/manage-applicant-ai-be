@@ -19,3 +19,9 @@ export interface I_Input_Create_User {
   password: string;
   role: E_Role;
 }
+
+export interface I_Input_Update_User {
+  fullName?: string;
+  password?: string;
+  role?: E_Role;
+}

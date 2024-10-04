@@ -1,43 +1,53 @@
-import { User } from './user.model';
-import { I_Context, I_FindPaging } from '#shared/typescript';
-import { paginate } from '#shared/utils/paginate';
-import { throwResponse } from '#shared/utils/log';
-import { UserError } from '#shared/constants/error-response';
-import { I_Input_Create_User } from './user.types';
+import bcrypt from "bcrypt";
+
+import { User } from "./user.model";
+import {
+    I_Context,
+    I_FindPaging,
+    I_Return,
+    T_PaginateResult,
+} from "#shared/typescript";
+import { isValidEmail, paginate } from "#shared/utils";
+import { throwResponse } from "#shared/utils/log";
+import { UserError, ValidateError } from "#shared/constants/error-response";
+import { I_Input_Create_User, I_Input_Update_User, I_User } from "./user.types";
 
 export const userCtr = {
-    getUser: async (_: I_Context, { userId }: { userId: string }) => {
-        const user = await User.findOne({
+    getUser: async (_: I_Context, { id }: { id: string }) => {
+        const userFound = await User.findOne({
             where: {
-                id: userId
+                id,
             },
         });
 
-        if (!user) {
-            throwResponse({ ...UserError.USER_1 })
+        if (!userFound) {
+            throwResponse({ ...UserError.USER_01 });
         }
 
         return {
             success: true,
-            result: user,
+            result: userFound?.dataValues,
         };
     },
-    getUsers: async (_: I_Context, args: I_FindPaging) => {
-        const { page = 1, limit = 10, isPagination = true } = args;
+    getUsers: async (
+        _: I_Context,
+        { input }: { input: I_FindPaging }
+    ): Promise<T_PaginateResult<I_User>> => {
+        const { page = 1, pageSize = 10, isPagination = true } = input;
 
-        let users;
+        let users: User[];
         let totalDocs;
         let pagination = {};
 
         if (isPagination) {
             const result = await User.findAndCountAll({
-                limit,
-                offset: (page - 1) * limit,
+                limit: pageSize,
+                offset: (page - 1) * pageSize,
             });
 
             users = result.rows;
             totalDocs = result.count;
-            pagination = paginate(totalDocs, page, limit);
+            pagination = paginate(totalDocs, page, pageSize);
         } else {
             users = await User.findAll();
             totalDocs = users.length;
@@ -45,18 +55,99 @@ export const userCtr = {
 
         return {
             success: true,
-            result: users,
-            ...pagination,
+            result: {
+                docs: users.map((user) => user.dataValues),
+                ...pagination,
+            },
         };
     },
-    createUser: async (_: I_Context, { input }: { input: I_Input_Create_User }) => {
-        const newUser = await User.create({
-            ...input
+    createUser: async (
+        _: I_Context,
+        { input }: { input: I_Input_Create_User }
+    ): Promise<I_Return<I_User>> => {
+        const { email, password, ...rest } = input;
+
+        if (email && !isValidEmail(email)) {
+            throwResponse({ ...ValidateError.VALIDATE_01 });
+        }
+
+        const userCreated = await User.create({
+            email,
+            password: bcrypt.hashSync(password, 10),
+            ...rest,
         });
 
         return {
             success: true,
-            result: newUser,
+            result: userCreated.dataValues,
+        };
+    },
+    updateUser: async (
+        _: I_Context,
+        { id, update }: { id: string; update: I_Input_Update_User }
+    ): Promise<I_Return<I_User>> => {
+        const { password, ...rest } = update;
+
+        const userFound = await User.findByPk(id);
+
+        if (!userFound) {
+            throwResponse({ ...UserError.USER_01 });
+        }
+
+        await userFound?.update({
+            ...(password && { password: bcrypt.hashSync(password, 10) }),
+            ...rest
+        });
+
+        return {
+            success: true,
+            result: userFound?.dataValues,
+        };
+    },
+    deleteUser: async (_: I_Context, { id }: { id: string }) => {
+        const userFound = await User.findByPk(id);
+
+        if (!userFound) {
+            throwResponse({ ...UserError.USER_01 });
+        }
+
+        await userFound?.destroy();
+
+        return {
+            success: true,
+            result: userFound?.dataValues,
+        };
+    },
+    softDeleteUser: async (_: I_Context, { id }: { id: string }) => {
+        const userFound = await User.findByPk(id);
+
+        if (!userFound) {
+            throwResponse({ ...UserError.USER_01 });
+        }
+
+        await userFound?.update({
+            isDel: true
+        });
+
+        return {
+            success: true,
+            result: userFound?.dataValues,
+        };
+    },
+    restoreUser: async (_: I_Context, { id }: { id: string }) => {
+        const userFound = await User.findByPk(id);
+
+        if (!userFound) {
+            throwResponse({ ...UserError.USER_01 });
+        }
+
+        await userFound?.update({
+            isDel: false
+        });
+
+        return {
+            success: true,
+            result: userFound?.dataValues,
         };
     },
 };

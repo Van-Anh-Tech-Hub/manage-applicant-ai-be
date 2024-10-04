@@ -1,13 +1,71 @@
-type User {
-  id: ID!
+enum E_Role {
+  ADMIN
+  CANDIDATE
+  RECRUITER
+}
+
+type T_User {
+  id: String
+  fullName: String
+  email: String
+  role: E_Role
+  updatedAt: DateTime
+  createdAt: DateTime
+  isDel: Boolean
+}
+
+type T_Users {
+  docs: [T_User]!
+  totalDocs: Int!
+  limit: Int!
+  hasPrevPage: Boolean!
+  hasNextPage: Boolean!
+  page: Int!
+  totalPages: Int!
+  offset: Int!
+  prevPage: Int
+  nextPage: Int
+  pagingCounter: Int!
+}
+
+input createUserInput {
   fullName: String!
   email: String!
-  role: String!
+  password: String!
+  role: E_Role!
+}
+input updateUserInput {
+  fullName: String
+  password: String
+  role: E_Role
+}
+input getUserInput {
+  page: Int
+  pageSize: Int
+  isPagination: Boolean
+}
+
+type T_Response_User {
+  success: Boolean!
+  message: String
+  result: T_User
+}
+
+type T_Response_Users {
+  success: Boolean!
+  message: String
+  result: T_Users
 }
 
 type Query {
-  getUser(userId: String!): JSON!
+  getUser(id: String!): T_Response_User!
+  getUsers(input: getUserInput!): T_Response_Users!
 }
+
 type Mutation {
-  createUser(input: JSON!): JSON!
+  createUser(input: createUserInput!): T_Response_User!
+  updateUser(id: String!, update: updateUserInput!): T_Response_User!
+  deleteUser(id: String!): T_Response_User!
+  softDeleteUser(id: String!): T_Response_User!
+  restoreUser(id: String!): T_Response_User!
 }

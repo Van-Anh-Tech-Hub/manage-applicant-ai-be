@@ -1,6 +1,6 @@
 
 export interface I_FindPaging {
   page?: number;
-  limit?: number;
+  pageSize?: number;
   isPagination?: boolean | true;
 }
