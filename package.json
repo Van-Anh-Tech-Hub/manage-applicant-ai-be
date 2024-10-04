@@ -7,7 +7,12 @@
     "build": "tsc",
     "start": "node ./dist/server.js",
     "lint": "eslint 'src/**/*.{js,ts}'",
-    "lint:fix": "eslint 'src/**/*.{js,ts}' --fix"
+    "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
+    "migration:up": "npx sequelize-cli db:migrate",
+    "migration:down": "npx sequelize-cli db:migrate:undo",
+    "migration:down:all": "npx sequelize-cli db:migrate:undo:all",
+    "seeder:up": "npx sequelize-cli db:seed:all",
+    "seeder:down": "npx sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "",

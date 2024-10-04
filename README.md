@@ -53,6 +53,11 @@ Nếu muốn tắt đồng bộ bảng khi thay đổi cấu trúc thì vào fil
   sequelize.sync({ alter: true }) => sequelize.sync({ alter: false })
 ```
 
+## Tạo file migration
+```bash
+npx sequelize-cli migration:generate --name <Tên file>
+```
+
 ## Một số quy ước
 
 ### Quy ước đặt tên
