@@ -5,6 +5,7 @@ export enum E_Environment {
 }
 
 export interface I_SessionConfig {
+  NAME: string;
   COLLECTION_NAME: string;
   SECRET: string;
   MAX_AGE: number;

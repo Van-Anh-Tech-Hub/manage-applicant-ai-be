@@ -34,6 +34,7 @@ const config: I_Config = {
         isProd ? E_Environment.PRODUCTION : isStagingEnv ? E_Environment.STAGING : E_Environment.DEVELOPMENT,
     BODY_PARSER_LIMIT: requiredEnv('BODY_PARSER_LIMIT'),
     SESSION: {
+        NAME: requiredEnv('SESSION_NAME'),
         COLLECTION_NAME: requiredEnv('SESSION_COLLECTION_NAME'),
         SECRET: requiredEnv('SESSION_SECRET'),
         MAX_AGE: requiredIntEnv('SESSION_MAX_AGE'),

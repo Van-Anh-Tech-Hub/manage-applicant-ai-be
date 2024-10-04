@@ -15,17 +15,28 @@ type T_User {
 }
 
 type T_Users {
-  docs: [T_User]!
-  totalDocs: Int!
-  limit: Int!
-  hasPrevPage: Boolean!
-  hasNextPage: Boolean!
-  page: Int!
-  totalPages: Int!
-  offset: Int!
+  docs: [T_User]
+  totalDocs: Int
+  limit: Int
+  hasPrevPage: Boolean
+  hasNextPage: Boolean
+  page: Int
+  totalPages: Int
+  offset: Int
   prevPage: Int
   nextPage: Int
-  pagingCounter: Int!
+  pagingCounter: Int
+}
+input getUsersInput {
+  where: JSON
+  orderBy: JSON
+  page: Int
+  pageSize: Int
+  isPagination: Boolean
+}
+input getUserInput {
+  where: JSON
+  orderBy: JSON
 }
 
 input createUserInput {
@@ -38,11 +49,6 @@ input updateUserInput {
   fullName: String
   password: String
   role: E_Role
-}
-input getUserInput {
-  page: Int
-  pageSize: Int
-  isPagination: Boolean
 }
 
 type T_Response_User {
@@ -58,8 +64,8 @@ type T_Response_Users {
 }
 
 type Query {
-  getUser(id: String!): T_Response_User!
-  getUsers(input: getUserInput!): T_Response_Users!
+  getUser(input: getUserInput!): T_Response_User!
+  getUsers(input: getUsersInput!): T_Response_Users!
 }
 
 type Mutation {

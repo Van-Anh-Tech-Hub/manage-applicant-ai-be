@@ -7,7 +7,8 @@ import { DocumentNode, GraphQLScalarType } from 'graphql';
 import { GraphQLDateTime, GraphQLJSON } from 'graphql-scalars';
 
 import path from 'path';
-// import authenticate from './authenticate';
+import authenticate from './authenticate';
+import { E_Role } from '#modules/user';
 
 type T_ResolverObject = Record<string, Record<string, GraphQLScalarType>>;
 
@@ -37,10 +38,13 @@ const schema = applyMiddleware(
     schemaWithoutMiddleware,
     {
         Query: {
-            // yourQueryName: authenticate, // Apply to specific queries
         },
         Mutation: {
-            // yourMutationName: authenticate, // Apply to specific mutations
+            createUser: authenticate([E_Role.ADMIN]),
+            updateUser: authenticate([E_Role.ADMIN]),
+            deleteUser: authenticate([E_Role.ADMIN]),
+            softDeleteUser: authenticate([E_Role.ADMIN]),
+            restoreUser: authenticate([E_Role.ADMIN]),
         },
     }
 );

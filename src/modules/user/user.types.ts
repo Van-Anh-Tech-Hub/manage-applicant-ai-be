@@ -7,10 +7,10 @@ export enum E_Role {
 }
 
 export interface I_User extends I_BaseAttributes {
-  fullName: string;
-  email: string;
-  password: string;
-  role: E_Role;
+  fullName?: string;
+  email?: string;
+  password?: string;
+  role?: E_Role;
 }
 
 export interface I_Input_Create_User {
