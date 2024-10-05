@@ -1,0 +1,22 @@
+type T_Field {
+  id: String
+  name: String
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getFieldInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_Field {
+  success: Boolean!
+  message: String
+  result: T_Field
+}
+
+type Query {
+  getField(input: getFieldInput!): T_Response_Field!
+}

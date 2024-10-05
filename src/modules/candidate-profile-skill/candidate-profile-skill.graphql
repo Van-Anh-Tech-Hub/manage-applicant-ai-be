@@ -1,0 +1,25 @@
+type T_CandidateProfileSkill {
+  id: String
+  profileId: String
+  skill: String
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getCandidateProfileSkillInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_CandidateProfileSkill {
+  success: Boolean!
+  message: String
+  result: T_CandidateProfileSkill
+}
+
+type Query {
+  getCandidateProfileSkill(
+    input: getCandidateProfileSkillInput!
+  ): T_Response_CandidateProfileSkill!
+}

@@ -5,8 +5,8 @@ import { I_Field } from './field.types';
 
 export class Field extends Model<I_Field> implements I_Field {
     public id!: string;
-    public isDel!: boolean
     public name!: string;
+    public isDel!: boolean
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
 }

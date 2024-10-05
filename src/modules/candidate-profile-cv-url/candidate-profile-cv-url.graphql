@@ -1,0 +1,25 @@
+type T_CandidateProfileCvUrl {
+  id: String
+  profileId: String
+  cvUrl: String
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getCandidateProfileCvUrlInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_CandidateProfileCvUrl {
+  success: Boolean!
+  message: String
+  result: T_CandidateProfileCvUrl
+}
+
+type Query {
+  getCandidateProfileCvUrl(
+    input: getCandidateProfileCvUrlInput!
+  ): T_Response_CandidateProfileCvUrl!
+}

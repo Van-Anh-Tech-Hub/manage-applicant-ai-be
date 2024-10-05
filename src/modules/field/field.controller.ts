@@ -1,20 +1,24 @@
 import { NextFunction, Request, Response } from "express";
 
 import { Field } from "./field.model"
-import { ResponseData } from "#shared/utils";
+import { throwResponse } from "#shared/utils";
+import { I_Context, I_FindOne } from "#shared/typescript";
+import { FieldError } from "#shared/constants/error-response";
 
 export const fieldCtr = {
-  getFields: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const fields = await Field.findAll();
-      ResponseData(res, 200, {
-        success: true,
-        result: {
-          fields
-        }
-      })
-    } catch (error) {
-      next(error)
+  getField: async (_: I_Context, { where, orderBy }: I_FindOne) => {
+    const fieldFound = await Field.findOne({
+      where,
+      order: orderBy
+    });
+
+    if (!fieldFound) {
+      throwResponse({ ...FieldError.FIELD_01 });
     }
+
+    return {
+      success: true,
+      result: fieldFound?.dataValues,
+    };
   },
 }

@@ -1,0 +1,24 @@
+type T_JobApplicant {
+  id: String
+  jobId: String
+  userId: String
+  cvUrl: String
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getJobApplicantInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_JobApplicant {
+  success: Boolean!
+  message: String
+  result: T_JobApplicant
+}
+
+type Query {
+  getJobApplicant(input: getJobApplicantInput!): T_Response_JobApplicant!
+}

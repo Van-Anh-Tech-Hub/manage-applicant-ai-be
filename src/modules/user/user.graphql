@@ -9,9 +9,9 @@ type T_User {
   fullName: String
   email: String
   role: E_Role
+  isDel: Boolean
   updatedAt: DateTime
   createdAt: DateTime
-  isDel: Boolean
 }
 
 type T_Users {
@@ -27,6 +27,7 @@ type T_Users {
   nextPage: Int
   pagingCounter: Int
 }
+
 input getUsersInput {
   where: JSON
   orderBy: JSON

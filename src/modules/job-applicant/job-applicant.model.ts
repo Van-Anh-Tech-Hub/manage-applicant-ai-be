@@ -46,7 +46,7 @@ JobApplicant.init({
   indexes: [
     {
       unique: true,
-      fields: ['jobId', 'userId'],
+      fields: ['job_id', 'user_id'],
       name: 'unique_job_user',
     },
   ],

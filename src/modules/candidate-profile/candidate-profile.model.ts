@@ -6,8 +6,8 @@ import { E_Experience, I_CandidateProfile } from './candidate-profile.types';
 
 export class CandidateProfile extends Model<I_CandidateProfile> implements I_CandidateProfile {
   public id!: string;
-  public experience!: E_Experience;
   public userId!: string;
+  public experience!: E_Experience;
   public isDel!: boolean;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;

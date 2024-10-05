@@ -1,0 +1,26 @@
+type T_Job {
+  id: String
+  recruiterId: String
+  title: String
+  description: String
+  salary: Int
+  position: String
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getJobInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_Job {
+  success: Boolean!
+  message: String
+  result: T_Job
+}
+
+type Query {
+  getJob(input: getJobInput!): T_Response_Job!
+}

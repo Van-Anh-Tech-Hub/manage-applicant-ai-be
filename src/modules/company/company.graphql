@@ -1,0 +1,27 @@
+type T_Company {
+  id: String
+  userId: String
+  name: String
+  description: String
+  workingAddress: String
+  fieldId: String
+  employeeSize: Int
+  isDel: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+input getCompanyInput {
+  where: JSON
+  orderBy: JSON
+}
+
+type T_Response_Company {
+  success: Boolean!
+  message: String
+  result: T_Company
+}
+
+type Query {
+  getCompany(input: getCompanyInput!): T_Response_Company!
+}

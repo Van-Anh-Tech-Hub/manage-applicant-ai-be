@@ -1,9 +1,56 @@
 import { RESPONSE_STATUS } from "./response-status";
 
+
+export const CandidateProfileError = {
+  CANDIDATE_PROFILE_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Hồ sơ ứng viên không tồn tại',
+  },
+}
+export const CandidateProfileCVUrlError = {
+  CANDIDATE_PROFILE_CV_URL_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'URL CV hồ sơ ứng viên không tồn tại',
+  },
+}
+
+export const CandidateProfileSkillError = {
+  CANDIDATE_PROFILE_SKILL_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Kỹ năng hồ sơ ứng viên không tồn tại',
+  },
+}
+
+export const CompanyError = {
+  COMPANY_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Công ty không tồn tại',
+  },
+}
+export const FieldError = {
+  FIELD_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Lĩnh vực không tồn tại',
+  },
+};
+
+export const JobError = {
+  JOB_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Công việc không tồn tại',
+  },
+};
+
+export const JobApplicantError = {
+  JOB_APPLICANT_01: {
+    status: RESPONSE_STATUS.BAD_REQUEST,
+    message: 'Người xin việc không tồn tại',
+  },
+};
 export const UserError = {
   USER_01: {
     status: RESPONSE_STATUS.BAD_REQUEST,
-    message: 'Ngươi dùng không tồn tại',
+    message: 'Người dùng không tồn tại',
   },
   USER_02: {
     status: RESPONSE_STATUS.BAD_REQUEST,

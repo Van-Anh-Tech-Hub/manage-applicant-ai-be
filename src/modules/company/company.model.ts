@@ -10,7 +10,7 @@ export class Company extends Model<I_Company> implements I_Company {
   public userId!: string;
   public name!: string;
   public description!: string;
-  public working_address!: string;
+  public workingAddress!: string;
   public fieldId!: string;
   public employeeSize!: string;
   public isDel!: boolean;
@@ -41,7 +41,7 @@ Company.init({
     type: DataTypes.STRING,
     allowNull: true,
   },
-  working_address: {
+  workingAddress: {
     type: DataTypes.STRING,
     allowNull: false,
   },
