@@ -1,2 +1,2 @@
-export * from './auth.controller'
+export * from './auth.resolver'
 export * from './auth.types'

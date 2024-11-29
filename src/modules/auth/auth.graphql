@@ -1,31 +1,25 @@
-type T_Auth {
-  user: T_User
-  token: String
-}
-
-type T_Response_Auth {
-  success: Boolean!
-  message: String
-  result: T_Auth
-}
-
-input registerInput {
-  fullName: String!
-  email: String!
-  password: String!
-  role: E_Role!
-}
-
-type Query {
-  checkAuth(token: String): T_Response_Auth!
+type AuthResponse {
+  token: String!
 }
 
 type Mutation {
-  register(input: registerInput!): T_Response_Auth!
-  login(
+  login(email: String!, password: String!): AuthResponse
+  register(
     email: String!
     password: String!
-    rememberMe: Boolean
-  ): T_Response_Auth!
-  logout: T_Response_Auth!
+    fullName: String!
+    role: E_Role!
+    company: CompanyInput
+  ): AuthResponse!
+}
+
+input CompanyInput {
+  name: String!
+  location: LocationInput
+}
+
+input LocationInput {
+  address: String!
+  city: String!
+  country: String!
 }
