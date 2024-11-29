@@ -1,117 +1,86 @@
-# Hướng dẫn
+# Hệ thống quản lý tuyển dụng và đăng bài tuyển dụng
 
-## Yêu cầu
+## Mô tả dự án
+Hệ thống quản lý tuyển dụng và đăng bài tuyển dụng là một ứng dụng web cho phép các công ty và tổ chức đăng tin tuyển dụng, quản lý ứng viên và quy trình tuyển dụng. Hệ thống cung cấp giao diện dễ sử dụng cho nhà tuyển dụng để đăng tin tuyển dụng, theo dõi ứng viên và cập nhật tình trạng tuyển dụng. Ứng viên có thể tìm kiếm và nộp đơn ứng tuyển vào các vị trí công việc phù hợp với kỹ năng và sở thích của họ.
 
-- nvm (node version manager):
-  - MacOS: <https://github.com/nvm-sh/nvm>
-  - Windows: <https://github.com/coreybutler/nvm-windows>
-- Node: 20.15.0 (nvm sẽ tự động cài đặt phiên bản này nếu chưa có)
-  - MacOS: <https://nodejs.org/dist/v20.15.0/node-v20.15.0.pkg>
-  - Windows: <https://nodejs.org/dist/v20.15.0/node-v20.15.0-x64.msi>
-- Dùng npm, không dùng các công cụ khác để tránh xung đột
+## Nghiệp vụ
+
+| STT |         Nghiệp vụ            | Phân công  |
+|-----|------------------------------|------------|
+|  1  |  Quản lý người dùng(Admin)   |   Trường   | 
+|  2  |  Quản lý công việc(Admin)    |    Trường  |
+|  3  |  Quản lý công việc(NTD)      |      Anh   |
+|  4  |  Quản lý ứng viên(NTD)       |     Anh    |
+|  5  |  Quản lý công ty(NTD)        |     Anh    |
+|  6  |  Quản lý hồ sơ cá nhân(UV)   |    Trường  |
+|  7  |  Quản lý CV ứng tuyển(UV)    |    Duy     |
+|  8  |  Tìm kiếm công việc(UV)      |   Duy     |
+|  9  |  Login, Register, Authentication | Duy.  |
+| 10  |  Tích hợp AI         | Duy, Trường, Anh. |
+
+## Chức năng
+
+### 1. **Quản lý người dùng**
+- Cập nhật thông tin tài khoản.
+- Xóa tài khoản người dùng.
+
+### 2. **Quản lý công việc (Nhà tuyển dụng)**
+- Tạo mới bài đăng tuyển dụng.
+- Cập nhật nội dung bài đăng tuyển dụng.
+- Xóa bài đăng tuyển dụng.
+- Xem danh sách các bài đăng công việc đã đăng.
+
+### 3. **Quản lý ứng viên**
+- Xem danh sách các ứng viên đã nộp đơn ứng tuyển.
+- Cập nhật trạng thái ứng tuyển của ứng viên.
+
+### 4. **Quản lý công ty**
+- Cập nhật thông tin công ty.
+- Cập nhật hồ sơ công ty.
+
+### 5. **Quản lý hồ sơ cá nhân (Ứng viên)**
+- Cập nhật thông tin cá nhân.
+- Cập nhật kỹ năng, kinh nghiệm làm việc.
+- Cập nhật liên kết CV của ứng viên.
+
+### 6. **Quản lý công việc đã ứng tuyển**
+- Xem danh sách công việc đã ứng tuyển.
+- Theo dõi trạng thái đơn ứng tuyển (bị từ chối hoặc được nhận).
+
+### 7. **Tìm kiếm công việc**
+- Tìm kiếm công việc theo từ khóa, địa điểm, mức lương, ngành nghề.
+
+### 8. **Login, Register, Authentication**
+- Đăng nhập và đăng ký tài khoản người dùng cho nhà tuyển dụng và ứng viên.
+- Xác thực tài khoản người dùng.
+
+### 9. **Tích hợp AI**
+- Gợi ý công việc phù hợp dựa trên hồ sơ cá nhân và kỹ năng của ứng viên.
+
+## Công nghệ sử dụng
+- **Backend:** C# Winform, NodeJS
+- **Frontend:** ReactJS, Tailwind, AntDesign
+- **Database:** SQL Server
 
 ## Cài đặt
+1. **Clone Repository:**
+    ```bash
+    git clone https://github.com/Van-Anh-Tech-Hub/manage-applicant-ai-fe
+    ```
 
-Sao chép file `.env.example` ra một file tương tự, đổi tên file thành `.env`
+2. **Cài đặt Dependencies:**
+    - Mở dự án trong Visual Studio Code 2022.
 
-Chỉnh sửa một số trường `.env` cho phù hợp với môi trường máy cá nhân, có thể để như mặc định
+3. **Cấu hình Database:**
+    - Cập nhật chuỗi kết nối trong tệp cấu hình để kết nối với SQL Server.
 
-```bash
-UPLOAD_FOLDER=thư mục dùng riêng cho upload file
-CORS_WHITELIST= các tên miền cho phép truy cập vào BE, viết dính liền, cách nhau bởi dấu phẩy
-PORT=cổng của BE
-RESTAPI_ENDPOINT=đường dẫn để truy cập rest api
-DB_USER=tên người dùng đăng nhập vào database
-DB_PASSWORD=mật khẩu người dùng đăng nhập vào database
-DB_SERVER=host truy cập vào database
-DB_DATABASE=database muốn truy cập
-```
+4. **Chạy ứng dụng:**
+    - Xây dựng và chạy ứng dụng từ Visual Studio Code 2022.
 
-Chạy lệnh
+## Đóng góp
+Nếu bạn muốn đóng góp vào dự án, vui lòng tạo một pull request hoặc gửi vấn đề qua GitHub Issues.
 
-```bash
-npm i
-```
-
-<h2 style="color:red;"> Lưu ý(tạo database trong Sql Server trước)</h2>
-## Chạy ở môi trường development (cần bật mongodb trước).
-
-```bash
-npm run dev
-```
-
-Khi thành công sẽ thấy terminal/console hiển thị thông báo:
-
-```bash
-🚀🚀 Connected Connected to the database successfully 🚀🚀
-🚀🚀 Running RestAPI on http://localhost:8000/rest 🚀🚀
-```
-
-Nếu muốn tắt đồng bộ bảng khi thay đổi cấu trúc thì vào file server.ts thay đổi alter: true => false
-
-```bash
-  sequelize.sync({ alter: true }) => sequelize.sync({ alter: false })
-```
-
-## Tạo file migration
-```bash
-npx sequelize-cli migration:generate --name <Tên file>
-```
-
-## Một số quy ước
-
-### Quy ước đặt tên
-
-- Tên biến: `camelCase`
-- Tên hàm: `camelCase`
-- Tên biến parameter: `camelCase`
-- Tên biến argument: `camelCase`
-- Tên biến private: `_camelCase`
-- Tên class: `PascalCase`
-- Tên hằng số: `UPPER_CASE`
-- Tên file: `kebab-case`
-- Tên thư mục: `kebab-case`
-
-### Quy ước đặt tên chung
-
-- Tiền tố tuỳ thuộc vào từ khoá của typescript hoặc graphql
-- Quy tắc: Tiền tố + tên kiểu dữ liệu (ví dụ: `interface I_User`, `interface I_Role`)
-
-### Quy ước tiền tố typescript
-
-- Dùng tiền tố `I_` cho interface (ví dụ: `interface I_User`)
-- Dùng tiền tố `T_` cho type (ví dụ: `type T_User`)
-- Dùng tiền tố `E_` cho enum (ví dụ: `enum E_User`)
-
-### Quy ước đặt tên type graphql
-
-- Dùng tiền tố `T_` cho type (ví dụ: `type T_User`)
-- Dùng tiền tố `I_` cho input (ví dụ: `input I_Input_CreateUser`)
-
-## Cấu trúc thư mục và ý nghĩa
-
-```text
-.
-├── src
-│   ├── modules
-│   │   ├── [moduleName] => đặt tên dựa theo database entity và những domain liên quan đến nó
-│   │   │   ├── index.ts => export tất cả các file khác vào index.ts
-│   │   │   ├── moduleName.route.ts => nơi chứa các route của module
-│   │   │   ├── moduleName.controller.ts => chứa logic chính, kết nối đến model
-│   │   │   ├── moduleName.model.ts => cấu hình cấu trúc database
-│   │   │   ├── moduleName.types.ts => chứa typescript
-│   ├── shared => Các file dùng chung
-│   │   ├── constants => folder chứa các hằng số dùng chung, export tất cả các file con vào index.ts
-│   |   └── typescript => => folder chứa các typescript dùng chung, export tất cả các file con vào index.ts
-│   │   └── utils => => folder chứa các hàm dùng chung, export tất cả các file con vào index.ts
-│   ├── config.ts => định nghĩa các biến môi trường
-│   └── rootRouter.ts => nơi chứa toàn bộ route của dự án
-│   └── server.ts => khởi tạo server và import các file cần thiết vào server
-├── .env => biến môi trường
-├── .env.example => mẫu biến môi trường
-├── .gitignore => cấu hình bỏ qua file/folder cho git
-├── package-lock.json => cấu hình npm sau khi cài đặt
-├── package.json => cấu hình npm
-├── README.md => hướng dẫn
-└── tsconfig.json => cấu hình typescript
-```
+## Liên hệ
+- **Email:** duydadaga1@gmail.com
+## List Task Detail
+https://docs.google.com/spreadsheets/d/1i503jS2ZzZVG4yZ-4IDp5cMn7qjXpGNpP3Nf5dbTQ5c/edit?gid=0#gid=0
