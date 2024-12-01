@@ -1,0 +1,21 @@
+type JobCategory {
+  _id: ID!
+  name: String!
+  isDel: Boolean!
+}
+
+type Query {
+  getAllJobCategories: [JobCategory!]!
+  getJobCategoryById(id: ID!): JobCategory
+}
+
+type Mutation {
+  createJobCategory(category: JobCategoryInput!): JobCategory!
+  updateJobCategory(id: ID!, category: JobCategoryInput!): JobCategory
+  deleteJobCategory(id: ID!): JobCategory
+}
+
+input JobCategoryInput {
+  name: String!
+  isDel: Boolean
+}

@@ -1,52 +1,22 @@
-import{ DataTypes, Model } from 'sequelize';
+import { Schema, model, Document } from 'mongoose'
+import { I_Job } from './job.types'
 
-import sequelize from '#shared/database/sequelize';
-import { I_Job } from './job.types';
-import { User } from '#modules/user';
+export interface IJobDocument extends I_Job, Document {}
 
-export class Job extends Model<I_Job> implements I_Job {
-  public id!: string;
-  public recruiterId!: string;
-  public title!: string;
-  public description!: string;
-  public salary!: number;
-  public position!: string;
-  public readonly created_at!: Date;
-  public readonly updated_at!: Date;
-}
+const JobSchema = new Schema<IJobDocument>({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  salary: { type: Number, required: true },
+  experience: { type: Number, required: true },
+  deadline: { type: Date, required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  headcount: { type: Number, required: true },
+  companyId: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+  jobTypeId: { type: Schema.Types.ObjectId, ref: 'JobType', required: true },
+  categoryId: { type: Schema.Types.ObjectId, ref: 'JobCategory' },
+  locationId: { type: Schema.Types.ObjectId, ref: 'Location', required: true },
+  isDel: { type: Boolean, default: false },
+})
 
-Job.init({
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  recruiterId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  salary: {
-    type: DataTypes.DECIMAL(15, 2),
-    allowNull: false,
-  },
-  position: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-}, {
-  sequelize,
-  modelName: 'Job',
-  tableName: 'jobs',
-  timestamps: true,
-  underscored: true,
-});
-
-Job.belongsTo(User, { foreignKey: 'recruiterId', as: 'recruiter' });
+export const JobModel = model<IJobDocument>('Job', JobSchema)

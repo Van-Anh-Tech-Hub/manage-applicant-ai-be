@@ -1,33 +1,36 @@
-enum E_Experience {
-  UNDER_ONE_YEAR
-  ONE_TO_TWO_YEARS
-  TWO_TO_THREE_YEARS
-  THREE_TO_FOUR_YEARS
-  ABOVE_FIVE_YEARS
+input SkillInput {
+  name: String!
+  experience: Int!
 }
 
-type T_CandidateProfile {
-  id: String
-  userId: String
-  experience: E_Experience
+input ResumeInput {
+  cvLinks: [String!]!
+  skills: [SkillInput!]!
+}
+
+type Skill {
+  name: String!
+  experience: Int!
+}
+
+type Resume {
+  cvLinks: [String!]!
+  skills: [Skill!]!
+}
+
+type CandidateProfile {
+  id: ID!
+  resume: Resume!
   isDel: Boolean
-  updatedAt: DateTime
-  createdAt: DateTime
-}
-
-input getCandidateProfileInput {
-  where: JSON
-  orderBy: JSON
-}
-
-type T_Response_CandidateProfile {
-  success: Boolean!
-  message: String
-  result: T_CandidateProfile
 }
 
 type Query {
-  getCandidateProfile(
-    input: getCandidateProfileInput!
-  ): T_Response_CandidateProfile!
+  getCandidateProfiles: [CandidateProfile!]!
+  getCandidateProfileById(id: ID!): CandidateProfile
+}
+
+type Mutation {
+  createCandidateProfile(resume: ResumeInput!): CandidateProfile!
+  deleteCandidateProfile(id: ID!): CandidateProfile!
+  updateCandidateProfile(id: ID!, resume: ResumeInput!): CandidateProfile!
 }

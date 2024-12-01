@@ -1,10 +1,10 @@
-import { I_BaseAttributes } from "#shared/typescript";
+import mongoose from 'mongoose'
 
-export interface I_Company extends I_BaseAttributes {
-  userId: string;
-  description?: string;
-  name: string;
-  workingAddress: string;
-  fieldId: string;
-  employeeSize?: string;// Quy mô nhân sự
+export interface I_Company {
+  name: string
+  description?: string
+  size?: number
+  field?: string
+  locationId?: mongoose.Types.ObjectId
+  isDel?: boolean
 }

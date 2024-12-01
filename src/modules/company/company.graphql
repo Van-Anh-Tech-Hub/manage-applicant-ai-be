@@ -1,27 +1,31 @@
-type T_Company {
-  id: String
-  userId: String
-  name: String
+scalar Date
+
+type Company {
+  id: ID!
+  name: String!
   description: String
-  workingAddress: String
-  fieldId: String
-  employeeSize: Int
-  isDel: Boolean
-  updatedAt: DateTime
-  createdAt: DateTime
+  size: Int
+  field: String
+  locationId: ID
+  isDel: Boolean!
+  location: Location
 }
 
-input getCompanyInput {
-  where: JSON
-  orderBy: JSON
-}
-
-type T_Response_Company {
-  success: Boolean!
-  message: String
-  result: T_Company
+input CompanyInput {
+  name: String!
+  description: String
+  size: Int
+  field: String
+  locationId: ID
 }
 
 type Query {
-  getCompany(input: getCompanyInput!): T_Response_Company!
+  getCompanyById(companyId: ID!): Company
+  getAllCompanies: [Company!]!
+}
+
+type Mutation {
+  createCompany(companyData: CompanyInput!): Company!
+  updateCompany(companyId: ID!, companyData: CompanyInput!): Company
+  deleteCompany(companyId: ID!): Boolean!
 }

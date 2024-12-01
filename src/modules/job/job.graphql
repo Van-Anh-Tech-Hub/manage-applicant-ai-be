@@ -1,26 +1,66 @@
-type T_Job {
-  id: String
-  recruiterId: String
+scalar Date
+
+type Job {
+  id: ID!
+  title: String!
+  description: String!
+  salary: Float!
+  experience: Int
+  deadline: Date!
+  createdAt: Date!
+  updatedAt: Date!
+  headcount: Int!
+  companyId: ID!
+  jobTypeId: ID!
+  categoryId: ID
+  locationId: ID!
+  isDel: Boolean!
+  company: Company!
+  jobType: JobType!
+  category: JobCategory
+  location: Location!
+}
+
+input JobInput {
+  title: String
+  description: String
+  salary: Float
+  experience: Int
+  deadline: Date
+  headcount: Int
+  companyId: ID
+  jobTypeId: ID
+  categoryId: ID
+  locationId: ID
+}
+
+input UpdateJobInput {
   title: String
   description: String
   salary: Int
-  position: String
-  isDel: Boolean
-  updatedAt: DateTime
-  createdAt: DateTime
-}
-
-input getJobInput {
-  where: JSON
-  orderBy: JSON
-}
-
-type T_Response_Job {
-  success: Boolean!
-  message: String
-  result: T_Job
+  experience: Int
+  deadline: String
+  headcount: Int
+  jobTypeId: ID
+  categoryId: ID
+  locationId: ID
 }
 
 type Query {
-  getJob(input: getJobInput!): T_Response_Job!
+  getJobById(jobId: ID!): Job
+  getAllJobs(isDel: Boolean!): [Job!]!
+  getJobsWithFilters(
+    Jtitle: String
+    Jlocation: String
+    JCategory: String
+    isDel: Boolean
+  ): [Job!]!
+  getMaintainJobsByCompany(companyId: ID): [Job]
+}
+
+type Mutation {
+  createJob(jobData: JobInput!): Job!
+  updateJob(jobId: ID!, jobData: JobInput!): Job
+  updateIsDel(jobId: ID!, isDel: Boolean): Job
+  deleteJob(jobId: ID!): Boolean!
 }

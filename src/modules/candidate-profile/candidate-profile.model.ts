@@ -1,53 +1,24 @@
-import{ DataTypes, Model } from 'sequelize';
+import { Schema, model, Document } from 'mongoose'
+import { I_CandidateProfile } from './candidate-profile.types'
 
-import sequelize from '#shared/database/sequelize';
-import { User } from '#modules/user';
-import { E_Experience, I_CandidateProfile } from './candidate-profile.types';
+export interface ICandidateProfileDocument
+  extends I_CandidateProfile,
+    Document {}
 
-export class CandidateProfile extends Model<I_CandidateProfile> implements I_CandidateProfile {
-  public id!: string;
-  public userId!: string;
-  public experience!: E_Experience;
-  public isDel!: boolean;
-  public readonly created_at!: Date;
-  public readonly updated_at!: Date;
-}
-
-CandidateProfile.init({
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  experience: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isIn: {
-        args: [Object.values(E_Experience)],
-        msg: "Kinh nghiệm không hợp lệ",
+const CandidateProfileSchema = new Schema<ICandidateProfileDocument>({
+  resume: {
+    cvLinks: [{ type: String, required: true , default:[]}],
+    skills: [
+      {
+        name: { type: String, required: true, default:null },
+        experience: { type: Number, required: true, default:null },
       },
-    },
+    ]
   },
-  userId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  isDel: {
-    type: DataTypes.BOOLEAN 
-  }
-}, {
-  sequelize,
-  modelName: 'CandidateProfile',
-  tableName: 'candidate_profiles',
-  timestamps: true,
-  underscored: true,
-});
+  isDel: { type: Boolean, default: false },
+})
 
-CandidateProfile.beforeCreate(async (record: CandidateProfile) => {
-  if (record.isDel === undefined) {
-    record.dataValues.isDel = false;
-  }
-});
-
-CandidateProfile.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+export const CandidateProfileModel = model<ICandidateProfileDocument>(
+  'CandidateProfile',
+  CandidateProfileSchema
+)

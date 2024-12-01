@@ -1,0 +1,21 @@
+type JobType {
+  _id: ID!
+  type: String!
+  isDel: Boolean!
+}
+
+type Query {
+  getAllJobTypes: [JobType!]!
+  getJobTypeById(id: ID!): JobType
+}
+
+type Mutation {
+  createJobType(type: JobTypeInput!): JobType!
+  updateJobType(id: ID!, type: JobTypeInput!): JobType
+  deleteJobType(id: ID!): JobType
+}
+
+input JobTypeInput {
+  type: String!
+  isDel: Boolean
+}
