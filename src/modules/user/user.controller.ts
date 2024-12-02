@@ -1,162 +1,63 @@
-import bcrypt from "bcrypt";
+import { I_User } from './user.types'
+import { UserModel, IUserDocument } from './user.model'
+import bcrypt from 'bcrypt'
 
-import { User } from "./user.model";
-import {
-    I_Context,
-    I_FindOne,
-    I_FindPaging,
-    I_Return,
-    T_PaginateResult,
-} from "#shared/typescript";
-import { convertWhereCondition, isValidEmail, paginate } from "#shared/utils";
-import { throwResponse } from "#shared/utils/log";
-import { UserError, ValidateError } from "#shared/constants/error-response";
-import { I_Input_Create_User, I_Input_Update_User, I_User } from "./user.types";
+export const userController = {
+  getAllUsers: async (): Promise<I_User[]> => {
+    return await UserModel.find().select('-password')
+  },
 
-export const userCtr = {
-    getUser: async (_: I_Context, { where, orderBy }: I_FindOne) => {
-        const userFound = await User.findOne({
-            where,
-            order: orderBy
-        });
+  getUser: async (
+    email: string,
+    password: string
+  ): Promise<IUserDocument | null> => {
+    const user = await UserModel.findOne({ email })
+    if (!user) return null
 
-        if (!userFound) {
-            throwResponse({ ...UserError.USER_01 });
-        }
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) return null
 
-        return {
-            success: true,
-            result: userFound?.dataValues,
-        };
-    },
-    getUsers: async (
-        _: I_Context,
-        { input }: { input: I_FindPaging }
-    ): Promise<T_PaginateResult<I_User>> => {
-        const { page = 1, pageSize = 10, isPagination = true, orderBy } = input;
-        let { where } = input;
-        where = convertWhereCondition(where);
-        let users: User[];
-        let totalDocs;
-        let pagination = {};
+    return user
+  },
 
-        if (isPagination) {
-            const result = await User.findAndCountAll({
-                where,
-                order: orderBy,
-                limit: pageSize,
-                offset: (page - 1) * pageSize,
-            });
+  getInfoUser: async (userId: string): Promise<I_User | null> => {
+    const user = await UserModel.findById(userId).select('-password')
+    return user ? user.toObject() : null
+  },
 
-            users = result.rows;
-            totalDocs = result.count;
-            pagination = paginate(totalDocs, page, pageSize);
-        } else {
-            const result = await User.findAndCountAll({
-                where,
-                order: orderBy,
-            });
+  createUser: async (
+    user: I_User
+  ): Promise<{ message: string; data: I_User | null }> => {
+    const existingUser = await UserModel.findOne({ email: user.email })
+    if (existingUser) {
+      return {
+        message: 'Email already exists.',
+        data: null,
+      }
+    }
 
-            users = result.rows;
-            totalDocs = result.count;
-            pagination = paginate(totalDocs, page, totalDocs);
-        }
+    const newUser = new UserModel(user)
+    const savedUser = await newUser.save()
+    return {
+      message: 'User created successfully.',
+      data: savedUser.toObject(),
+    }
+  },
 
-        return {
-            success: true,
-            result: {
-                docs: users.map((user) => user.dataValues),
-                ...pagination,
-            },
-        };
-    },
-    createUser: async (
-        _: I_Context,
-        { input }: { input: I_Input_Create_User }
-    ): Promise<I_Return<I_User>> => {
-        const { email, password, ...rest } = input;
+  updateUser: async (
+    id: string,
+    user: Partial<I_User>
+  ): Promise<I_User | null> => {
+    return await UserModel.findByIdAndUpdate(id, user, { new: true }).select(
+      '-password'
+    )
+  },
 
-        if (email && !isValidEmail(email)) {
-            throwResponse({ ...ValidateError.VALIDATE_01 });
-        }
-
-        const userCreated = await User.create({
-            email,
-            password: bcrypt.hashSync(password, 10),
-            ...rest,
-        });
-
-        return {
-            success: true,
-            result: userCreated.dataValues,
-        };
-    },
-    updateUser: async (
-        _: I_Context,
-        { id, update }: { id: string; update: I_Input_Update_User }
-    ): Promise<I_Return<I_User>> => {
-        const { password, ...rest } = update;
-
-        const userFound = await User.findByPk(id);
-
-        if (!userFound) {
-            throwResponse({ ...UserError.USER_01 });
-        }
-
-        await userFound?.update({
-            ...(password && { password: bcrypt.hashSync(password, 10) }),
-            ...rest
-        });
-
-        return {
-            success: true,
-            result: userFound?.dataValues,
-        };
-    },
-    deleteUser: async (_: I_Context, { id }: { id: string }) => {
-        const userFound = await User.findByPk(id);
-
-        if (!userFound) {
-            throwResponse({ ...UserError.USER_01 });
-        }
-
-        await userFound?.destroy();
-
-        return {
-            success: true,
-            result: userFound?.dataValues,
-        };
-    },
-    softDeleteUser: async (_: I_Context, { id }: { id: string }) => {
-        const userFound = await User.findByPk(id);
-
-        if (!userFound) {
-            throwResponse({ ...UserError.USER_01 });
-        }
-
-        await userFound?.update({
-            isDel: true
-        });
-
-        return {
-            success: true,
-            result: userFound?.dataValues,
-        };
-    },
-    restoreUser: async (_: I_Context, { id }: { id: string }) => {
-        const userFound = await User.findByPk(id);
-
-        if (!userFound) {
-            throwResponse({ ...UserError.USER_01 });
-        }
-
-        await userFound?.update({
-            isDel: false
-        });
-
-        return {
-            success: true,
-            result: userFound?.dataValues,
-        };
-    },
-};
+  deleteUser: async (id: string): Promise<I_User | null> => {
+    return await UserModel.findByIdAndUpdate(
+      id,
+      { isDel: true },
+      { new: true }
+    ).select('-password')
+  },
+}

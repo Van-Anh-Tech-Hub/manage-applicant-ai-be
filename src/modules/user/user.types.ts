@@ -1,27 +1,17 @@
-import { I_BaseAttributes } from "#shared/typescript";
+import mongoose from 'mongoose'
 
 export enum E_Role {
-  ADMIN = "ADMIN",
-  CANDIDATE = "CANDIDATE",
-  RECRUITER = "RECRUITER",
+  ADMIN = 'admin',
+  RECRUITER = 'recruiter',
+  CANDIDATE = 'candidate',
 }
 
-export interface I_User extends I_BaseAttributes {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  role?: E_Role;
-}
-
-export interface I_Input_Create_User {
-  fullName: string;
-  email: string;
-  password: string;
-  role: E_Role;
-}
-
-export interface I_Input_Update_User {
-  fullName?: string;
-  password?: string;
-  role?: E_Role;
+export interface I_User {
+  fullName?: string
+  email: string
+  password: string
+  role: E_Role
+  candidateId?: mongoose.Types.ObjectId 
+  companyId?: mongoose.Types.ObjectId | null
+  isDel?: boolean
 }

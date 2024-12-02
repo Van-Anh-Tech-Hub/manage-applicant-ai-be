@@ -1,52 +1,46 @@
-import { applyMiddleware } from 'graphql-middleware';
-import { loadFilesSync } from '@graphql-tools/load-files';
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { IResolvers, TypeSource } from '@graphql-tools/utils';
-import { DocumentNode, GraphQLScalarType } from 'graphql';
-import { GraphQLDateTime, GraphQLJSON } from 'graphql-scalars';
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { loadFilesSync } from '@graphql-tools/load-files'
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge'
+import { applyMiddleware } from 'graphql-middleware'
+import { candidateProfileResolvers } from '../../modules/candidate-profile'
+import { userResolvers } from '../../modules/user'
+import { authResolvers } from './../../modules/auth'
+import { jobResolvers } from '../../modules/job'
+import { companyResolvers } from '../../modules/company'
+import { authenticate } from './authenticate'
+import { jobTypeResolvers } from '../../modules/job-type'
+import { locationResolvers } from '../../modules/location'
+import { jobCategoryResolvers } from '../../modules/job-category'
+import { applicationResolvers } from '../../modules/application'
+const typesArray = loadFilesSync('src/modules/**/*.graphql')
 
-import path from 'path';
-import authenticate from './authenticate';
-import { E_Role } from '#modules/user';
+const typeDefs = mergeTypeDefs(typesArray)
 
-type T_ResolverObject = Record<string, Record<string, GraphQLScalarType>>;
+const resolvers = mergeResolvers([
+  userResolvers,
+  authResolvers,
+  candidateProfileResolvers,
+  jobResolvers,
+  companyResolvers,
+  jobTypeResolvers,
+  locationResolvers,
+  jobCategoryResolvers,
+  applicationResolvers,
+])
 
-const currentDir = path.resolve(__dirname, '../../');
-
-const typesArray: TypeSource = loadFilesSync<string>(path.join(currentDir, '/**/*.graphql'), {
-    recursive: true,
-});
-
-const resolversArray: IResolvers[] = loadFilesSync<T_ResolverObject>(path.join(currentDir, '/**/*.resolver.{js,ts}'), {
-    recursive: true,
-});
-
-const allTypes: DocumentNode = mergeTypeDefs(typesArray);
-const allResolvers: IResolvers = mergeResolvers(resolversArray);
-
-const schemaWithoutMiddleware = makeExecutableSchema({
-    typeDefs: allTypes,
-    resolvers: {
-        JSON: GraphQLJSON,
-        DateTime: GraphQLDateTime,
-        ...allResolvers,
-    },
-});
+const middleware = {
+  Query: {
+    getInfoUser: authenticate,
+  },
+  Mutation: {},
+}
 
 const schema = applyMiddleware(
-    schemaWithoutMiddleware,
-    {
-        Query: {
-        },
-        Mutation: {
-            createUser: authenticate([E_Role.ADMIN]),
-            updateUser: authenticate([E_Role.ADMIN]),
-            deleteUser: authenticate([E_Role.ADMIN]),
-            softDeleteUser: authenticate([E_Role.ADMIN]),
-            restoreUser: authenticate([E_Role.ADMIN]),
-        },
-    }
-);
+  makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  }),
+  middleware
+)
 
-export default schema;
+export default schema

@@ -9,6 +9,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*.ts", "src/models/author/j.tsx"],
+  "include": ["src/**/*.ts", "src/modules/author/j.tsx"],
   "exclude": ["node_modules"]
 }

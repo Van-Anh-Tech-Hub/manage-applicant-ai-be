@@ -1,78 +1,53 @@
 enum E_Role {
-  ADMIN
-  CANDIDATE
-  RECRUITER
+  admin
+  recruiter
+  candidate
 }
 
-type T_User {
-  id: String
+type User {
+  _id: ID!
   fullName: String
-  email: String
-  role: E_Role
-  isDel: Boolean
-  updatedAt: DateTime
-  createdAt: DateTime
-}
-
-type T_Users {
-  docs: [T_User]
-  totalDocs: Int
-  limit: Int
-  hasPrevPage: Boolean
-  hasNextPage: Boolean
-  page: Int
-  totalPages: Int
-  offset: Int
-  prevPage: Int
-  nextPage: Int
-  pagingCounter: Int
-}
-
-input getUsersInput {
-  where: JSON
-  orderBy: JSON
-  page: Int
-  pageSize: Int
-  isPagination: Boolean
-}
-input getUserInput {
-  where: JSON
-  orderBy: JSON
-}
-
-input createUserInput {
-  fullName: String!
   email: String!
-  password: String!
   role: E_Role!
-}
-input updateUserInput {
-  fullName: String
-  password: String
-  role: E_Role
-}
-
-type T_Response_User {
-  success: Boolean!
-  message: String
-  result: T_User
+  candidateId: ID
+  companyId: ID
+  isDel: Boolean!
+  candidate: CandidateProfile
+  company: Company
 }
 
-type T_Response_Users {
-  success: Boolean!
-  message: String
-  result: T_Users
+type UserResponse {
+  message: String!
+  data: User
 }
 
 type Query {
-  getUser(input: getUserInput!): T_Response_User!
-  getUsers(input: getUsersInput!): T_Response_Users!
+  getAllUsers: [User!]!
+  getUser(email: String!, password: String!): User
+  getInfoUser: User
 }
 
 type Mutation {
-  createUser(input: createUserInput!): T_Response_User!
-  updateUser(id: String!, update: updateUserInput!): T_Response_User!
-  deleteUser(id: String!): T_Response_User!
-  softDeleteUser(id: String!): T_Response_User!
-  restoreUser(id: String!): T_Response_User!
+  createUser(
+    fullName: String
+    email: String!
+    password: String!
+    role: E_Role!
+    candidateId: ID
+    companyId: ID
+    isDel: Boolean
+  ): UserResponse!
+
+  updateUser(
+    id: ID!
+    fullName: String
+    email: String
+    password: String
+    role: E_Role
+    candidateId: ID
+    companyId: ID
+    isDel: Boolean
+  ): User
+
+  deleteUser(id: ID!): User
 }

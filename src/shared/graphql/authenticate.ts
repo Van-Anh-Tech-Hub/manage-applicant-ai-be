@@ -1,24 +1,30 @@
-import { E_Role } from '#modules/user';
-import { AuthError } from '#shared/constants/error-response';
-import { I_Context } from '#shared/typescript';
-import { throwResponse } from '#shared/utils';
-import { GraphQLError, GraphQLResolveInfo } from 'graphql';
-import { IMiddlewareFunction } from 'graphql-middleware';
+import { AuthenticatedRequest } from './../../modules/auth'
+import jwt from 'jsonwebtoken'
+import { GraphQLResolveInfo } from 'graphql'
 
-const authenticate = (roles: E_Role[]): IMiddlewareFunction<{ req: Request }> => {
-  return async (resolve, parent, args, context: I_Context, info: GraphQLResolveInfo) => {
-    const userLoggedIn = context.req.session.user;
+export const authenticate = async (
+  resolve: any,
+  parent: any,
+  args: any,
+  context: { req: AuthenticatedRequest },
+  info: GraphQLResolveInfo
+) => {
+  const token = (context.req.headers as any).authorization
+  if (!token) {
+    throw new Error('Authentication token is missing')
+  }
 
-    if (!userLoggedIn) {
-      return throwResponse({ ...AuthError.AUTH_07 })
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY || '') as {
+      userId: string
     }
-
-    const hasRequiredRole = roles.includes(userLoggedIn.role!);
-    if (!hasRequiredRole) {
-      return throwResponse({ ...AuthError.AUTH_08 })
+    context.req.userId = decoded.userId
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('Token has expired')
     }
-    return resolve(parent, args, context, info);
-  };
-};
+    throw new Error('Invalid authentication token')
+  }
 
-export default authenticate;
+  return resolve(parent, args, context, info)
+}

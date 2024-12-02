@@ -1,70 +1,32 @@
-import{ DataTypes, Model } from 'sequelize';
+import { Schema, model, Document } from 'mongoose'
+import { I_User, E_Role } from './user.types'
+import bcrypt from 'bcrypt'
 
-import sequelize from '#shared/database/sequelize';
-import { E_Role, I_User } from './user.types';
-export class User extends Model<I_User> implements I_User {
-    public id!: string;
-    public fullName!: string;
-    public email!: string;
-    public password!: string;
-    public role!: E_Role;
-    public isDel!: boolean
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+export interface IUserDocument extends I_User, Document {
+  isModified: (path: string) => boolean
 }
 
+const UserSchema = new Schema<IUserDocument>({
+  fullName: { type: String },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: Object.values(E_Role),
+    default: E_Role.CANDIDATE,
+  },
+  candidateId: { type: Schema.Types.ObjectId, ref: 'CandidateProfile'},
+  companyId: { type: Schema.Types.ObjectId, ref: 'Company' },
+  isDel: { type: Boolean, default: false },
+})
 
-User.init({
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-    },
-    fullName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: {
-            name: 'uniqueEmail',
-            msg: "Email đã tồn tại"
-        },
-        validate: {
-            isEmail: {
-                msg: "Định dạng email không đúng"
-            },
-        },
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    role: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isIn: {
-                args: [Object.values(E_Role)],
-                msg: "Role không hợp lệ"
-            }
-        }
-    },
-    isDel: {
-        type: DataTypes.BOOLEAN,
-    }
-}, {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true,
-    underscored: true,
-});
+UserSchema.pre('save', async function (next) {
+  const user = this as IUserDocument
+  if (user.isModified('password')) {
+    const salt = await bcrypt.genSalt(10)
+    user.password = await bcrypt.hash(user.password, salt)
+  }
+  next()
+})
 
-
-User.beforeCreate(async (record: User) => {
-    if (record.isDel === undefined) {
-        record.dataValues.isDel = false;
-    }
-});
+export const UserModel = model<IUserDocument>('User', UserSchema)
