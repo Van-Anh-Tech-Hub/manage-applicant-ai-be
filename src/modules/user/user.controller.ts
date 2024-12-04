@@ -1,6 +1,6 @@
 import { I_User } from './user.types'
 import { UserModel, IUserDocument } from './user.model'
-import bcrypt from 'bcrypt'
+import { passwordHasher } from '../../shared/utils'
 
 export const userController = {
   getAllUsers: async (): Promise<I_User[]> => {
@@ -14,7 +14,7 @@ export const userController = {
     const user = await UserModel.findOne({ email })
     if (!user) return null
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = passwordHasher.verifyPassword(password, user.password)
     if (!isMatch) return null
 
     return user

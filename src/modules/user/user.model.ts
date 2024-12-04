@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose'
 import { I_User, E_Role } from './user.types'
-import bcrypt from 'bcrypt'
+import { passwordHasher } from '../../shared/utils'
 
 export interface IUserDocument extends I_User, Document {
   isModified: (path: string) => boolean
@@ -23,8 +23,7 @@ const UserSchema = new Schema<IUserDocument>({
 UserSchema.pre('save', async function (next) {
   const user = this as IUserDocument
   if (user.isModified('password')) {
-    const salt = await bcrypt.genSalt(10)
-    user.password = await bcrypt.hash(user.password, salt)
+    user.password = passwordHasher.hashPassword(user.password)
   }
   next()
 })

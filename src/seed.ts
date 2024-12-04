@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt'
 import { UserModel, E_Role } from './modules/user'
 import { LocationModel } from './modules/location'
 import { JobTypeModel } from './modules/job-type'
@@ -7,11 +6,7 @@ import { JobModel } from './modules/job'
 import { CompanyModel } from './modules/company'
 import { CandidateProfileModel } from './modules/candidate-profile'
 import { ApplicationModel, E_ApplicationStatus } from './modules/application'
-
-async function hashPassword(password: string): Promise<string> {
-  const salt = await bcrypt.genSalt(10)
-  return await bcrypt.hash(password, salt)
-}
+import { passwordHasher } from './shared/utils'
 
 export async function seedData() {
   const locations = await LocationModel.insertMany([
@@ -176,7 +171,7 @@ export async function seedData() {
   ])
 
   // Tạo mật khẩu đã băm
-  const hashedPassword = await hashPassword('123123')
+  const hashedPassword = await passwordHasher.hashPassword('123123')
   const users = await UserModel.insertMany([
     {
       email: 'vuvananh010203@gmail.com',
