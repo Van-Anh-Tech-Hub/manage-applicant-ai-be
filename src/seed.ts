@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt';
-import { UserModel, E_Role } from './models/user';
-import { LocationModel } from './models/location';
-import { JobTypeModel } from './models/job-type';
-import { JobCategoryModel } from './models/job-category';
-import { JobModel } from './models/job';
-import { CompanyModel } from './models/company';
-import { CandidateProfileModel } from './models/candidate-profile';
-import { ApplicationModel, E_ApplicationStatus } from './models/application';
+import { UserModel, E_Role } from './modules/user';
+import { LocationModel } from './modules/location';
+import { JobTypeModel } from './modules/job-type';
+import { JobCategoryModel } from './modules/job-category';
+import { JobModel } from './modules/job';
+import { CompanyModel } from './modules/company';
+import { CandidateProfileModel } from './modules/candidate-profile';
+import { ApplicationModel, E_ApplicationStatus } from './modules/application';
 
 async function hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
